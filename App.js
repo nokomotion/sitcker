@@ -1,12 +1,29 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import {Camera} from 'expo-camera';
+import * as Permissions from 'expo-permissions';
+import React, { Component } from 'react';
+
 import { StyleSheet, Text, View } from 'react-native';
+
+
+state={
+hasCameraPermission: null,
+type: Camera.Constants.type.back,
+
+};
+
+async ComponentDidMount(){
+  const { status } = await Permissions.askAsync(Permissions.CAMERA);
+  this.setState({ hasPermission: status === 'granted' });
+}
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      
       <Text>Hola Nokomotion</Text>
+     
+
       <StatusBar style="auto" />
     </View>
   );
