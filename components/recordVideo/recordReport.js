@@ -6,7 +6,7 @@ const ScreenA = () => {
     return (
         <SafeAreaView>
         <View>
-            <Text>Screen A</Text>
+            <Text>Grabar reportes</Text>
         </View>
         </SafeAreaView>
     )
