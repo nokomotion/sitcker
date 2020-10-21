@@ -9,7 +9,7 @@ import {
     ScrollView } from 'react-native'
 import { Video } from 'expo-av'
 
-// const {widthVideo, heightVideo} = Dimensions.get('window');
+const {widthVideo, heightVideo} = Dimensions.get('window');
 // Image.getSize('../.././assets/hack.png', (width, height) => {this.setState({width, height})});
 
 
@@ -17,9 +17,7 @@ const ReportsLists = ({ navigation }) => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View style={styles.container}>
-                    <Image style = {styles.watermark} source = {{uri: 'https://www.hackathones.mx/img/supporters/3.png'}}/>
-
+                <View>
                     <Video
                         source={{ uri: 'https://i.imgur.com/j020nsG.mp4' }}
                         rate={1.0}
@@ -31,6 +29,8 @@ const ReportsLists = ({ navigation }) => {
                         useNativeControls
                         style={{ width: 420, height: 680, flex: 1, zIndex: 1 }}
                     />
+
+                    <Image style = {styles.stickerPos} source = {{uri: 'https://www.hackathones.mx/img/supporters/3.png'}}/>
 			    </View>
             </ScrollView>
         </SafeAreaView>
@@ -38,16 +38,14 @@ const ReportsLists = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        margin: 5
-    },
-    watermark: {
+    stickerPos: {
         margin: 5,
         position: 'absolute',
         top: 0,
         left: 0,
-        opacity: 50,
-        zIndex: 100
+        zIndex: 2,
+        width: 80,
+        height: 80
     }
 });
 

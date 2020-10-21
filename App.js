@@ -10,13 +10,13 @@ import ProfileInfo from './components/userInfo/profileInfo'
 
 const tabNavigator = createBottomTabNavigator({
     'Camara': createStackNavigator({
-        RecordReport: RecordReport
+		'Grabar Reporte': RecordReport
     }),
     'Reportes': createStackNavigator({
-		ReportsList: ReportsList
+		'Información del reporte': ReportsList
     }),
     'Perfil': createStackNavigator({
-		ProfileInfo: ProfileInfo
+		'Información de la cuenta': ProfileInfo
     })
 },
 {
