@@ -4,16 +4,16 @@ import { createStackNavigator } from 'react-navigation-stack'
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { Ionicons } from '@expo/vector-icons'
 
-import RecordReport from './components/recordVideo/recordReport'
-import ReportsList from './components/videoReports/listReports'
-import ProfileInfo from './components/userInfo/profileInfo'
+import RecordReport from './components/recordVideo'
+import ReportsList from './components/videoReports'
+import ProfileInfo from './components/userInfo'
 
 const tabNavigator = createBottomTabNavigator({
     'Camara': createStackNavigator({
 		'Grabar Reporte': RecordReport
     }),
-    'Reportes': createStackNavigator({
-		'Información del reporte': ReportsList
+    'Explorar': createStackNavigator({
+		'Explorar reportes': ReportsList
     }),
     'Perfil': createStackNavigator({
 		'Información de la cuenta': ProfileInfo
@@ -27,8 +27,8 @@ const tabNavigator = createBottomTabNavigator({
 			let iconName
 			if (routeName === 'Camara'){
 				iconName = focused ? 'ios-camera' : 'ios-camera'
-			}else if (routeName === 'Reportes'){
-				iconName = focused ? 'md-warning' : 'md-warning'
+			}else if (routeName === 'Explorar'){
+				iconName = focused ? 'md-compass' : 'md-compass'
 			}else if(routeName === 'Perfil'){
 				iconName = focused ? 'ios-person' : 'ios-person'
 			}

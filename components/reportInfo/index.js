@@ -13,7 +13,7 @@ const {widthVideo, heightVideo} = Dimensions.get('window');
 // Image.getSize('../.././assets/hack.png', (width, height) => {this.setState({width, height})});
 
 
-const ReportsLists = ({ navigation }) => {
+const ReportInfo = ({ navigation }) => {
     return (
         <SafeAreaView>
             <ScrollView>
@@ -24,7 +24,7 @@ const ReportsLists = ({ navigation }) => {
                         volume={1.0}
                         isMuted={false}
                         resizeMode="cover"
-                        shouldPlay
+                        shouldPlay={false}
                         isLooping
                         useNativeControls
                         style={{ width: 420, height: 680, flex: 1, zIndex: 1 }}
@@ -49,4 +49,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ReportsLists
+export default ReportInfo
