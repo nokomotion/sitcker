@@ -11,6 +11,7 @@
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-mapbox-gl/maps": "^8.1.0-rc.9",
     "@react-navigation/native": "^5.7.6",
+    "@react-navigation/stack": "^5.11.1",
     "expo": "~39.0.2",
     "expo-av": "~8.6.0",
     "expo-camera": "~9.0.0",
