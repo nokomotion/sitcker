@@ -11,7 +11,7 @@ import Imagenes from "../screens/editVideo/draggable";
 
 const Tab = createBottomTabNavigator();
 
-export default function Nav1() {
+export default function Nav() {
 	return (
 		<Tab.Navigator
 			initialRouteName="Home"
