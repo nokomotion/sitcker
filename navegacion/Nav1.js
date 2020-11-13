@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Home from "../screen/Home";
 import Detalle from "../screen/Detalle";
 import Profile from "../screen/Profile";
+import Imagenes from "../screen/Imagenes";
 
 const Tab = createBottomTabNavigator();
 
@@ -44,6 +45,16 @@ export default function Nav1() {
         component={Profile}
         options={{
           tabBarLabel: "Profile",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="account" size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Imagenes"
+        component={Imagenes}
+        options={{
+          tabBarLabel: "Imagenes",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" size={size} />
           ),

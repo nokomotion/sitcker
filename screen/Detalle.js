@@ -15,6 +15,7 @@ import {
 } from "react-native";
 import { Video } from "expo-av";
 import * as MediaLibrary from "expo-media-library";
+import Imagenes from "./Imagenes";
 
 export default function Detalle() {
   const camRef = useRef(null);
