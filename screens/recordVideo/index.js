@@ -22,7 +22,6 @@ export default function RecordReport() {
 	const [type, setType] = useState(Camera.Constants.Type.back);
 	const [hasPermission, setHaspermission] = useState(null);
 	const [recording, setRecording] = useState(false);
-
 	const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
 	const [fotoCapturada, SetfotoCapturada] = useState(null);
 	const [abrir, setAbrir] = useState(false);
@@ -97,52 +96,91 @@ export default function RecordReport() {
 						backgroundColor: "transparent",
 						flexDireccion: "row",
 					}}
-				>
-					<TouchableOpacity
-						style={{
-							position: "absolute",
-							bottom: 20,
-							left: 20,
-						}}
-						onPress={() => {
-							setType(
-								type === Camera.Constants.Type.back
-									? Camera.Constants.Type.front
-									: Camera.Constants.Type.back
-							);
-						}}
-					>
-						<Ionicons
-							style={{ marginTop: 30, marginRight: 40, color: "black" }}
-							name="ios-reverse-camera"
-							size={34}
-							color="black"
-						/>
-					</TouchableOpacity>
-					<TouchableOpacity
-						style={{ flex: 0.1, alignSelf: "flex-start", alignItems: "center" }}
-						onPress={() => {
-							setFlash(
-								flash === Camera.Constants.FlashMode.torch
-									? Camera.Constants.FlashMode.torch
-									: Camera.Constants.FlashMode.off
-							);
-						}}
-					>
-						<FontAwesome name="camera" size={23} color="#FFF" />
-					</TouchableOpacity>
-				</View>
+				></View>
 			</Camera>
-			<TouchableOpacity style={styles.boton} onPress={tomarfoto}>
-				<FontAwesome name="camera" size={23} color="#FFF" />
-			</TouchableOpacity>
-			<TouchableOpacity style={styles.grabar} onPress={grabarVideo}>
-				<Ionicons
-					style={{ marginBottom: 10, color: "#EF3340" }}
-					name={recording ? "ios-square" : "ios-radio-button-on"}
-					size={100}
-				/>
-			</TouchableOpacity>
+
+			{/* Menu con opciónes de cámara */}
+			<View
+				style={{
+					backgroundColor: "white",
+					flex: 0.3,
+					borderTopLeftRadius: 20,
+					borderTopRightRadius: 20,
+					justifyContent: "center",
+					alignItems: "center",
+				}}
+			>
+				{/* Voltear camara */}
+				<TouchableOpacity
+					style={{
+						alignSelf: "flex-end",
+						flex: 0.1,
+						position: "absolute",
+					}}
+					onPress={() => {
+						setType(
+							type === Camera.Constants.Type.back
+								? Camera.Constants.Type.front
+								: Camera.Constants.Type.back
+						);
+					}}
+				>
+					<Ionicons
+						style={{ marginRight: 40, paddingBottom: 10, color: "black" }}
+						name="ios-reverse-camera"
+						size={38}
+						color="black"
+					/>
+				</TouchableOpacity>
+
+				{/* Activar flash */}
+				<TouchableOpacity
+					style={{
+						flex: 0.1,
+						alignSelf: "flex-start",
+						alignItems: "center",
+						position: "absolute",
+					}}
+					onPress={() => {
+						setFlash(
+							flash === Camera.Constants.FlashMode.torch
+								? Camera.Constants.FlashMode.torch
+								: Camera.Constants.FlashMode.off
+						);
+					}}
+				>
+					<Ionicons
+						style={{ marginLeft: 40, paddingBottom: 10, color: "black" }}
+						name={flash ? "ios-flash" : "ios-flash-off"}
+						size={34}
+						color="black"
+					/>
+				</TouchableOpacity>
+
+				{/* Botón para grabar */}
+				<TouchableOpacity style={styles.grabar} onPress={grabarVideo}>
+					<Ionicons
+						style={{ marginBottom: 10, color: "#EF3340" }}
+						name={recording ? "ios-square" : "ios-radio-button-on"}
+						size={100}
+					/>
+				</TouchableOpacity>
+
+				<Text style={{ color: "black" }}>
+					<Ionicons
+						style={{ color: "black" }}
+						name="ios-navigate"
+						size={18}
+						color="black"
+					/>
+
+					{/* {' Geolocalización aquí... '} */}
+				</Text>
+
+				<Text style={{ marginTop: 10, fontSize: 14, color: "black" }}>
+					Explicanos en 30 segundos que sucede...
+				</Text>
+			</View>
 
 			{fotoCapturada && (
 				<Modal animationType="slide" transparent={false} visible={abrir}>
