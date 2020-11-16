@@ -2,7 +2,11 @@ import { StatusBar } from "expo-status-bar";
 import { Camera } from "expo-camera";
 import * as Permissions from "expo-permissions";
 import React, { Component, useState, useEffect, useRef } from "react";
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import {
+	FontAwesome,
+	Ionicons,
+	MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import {
 	SafeAreaView,
 	StyleSheet,
@@ -184,39 +188,40 @@ export default function RecordReport() {
 
 			{fotoCapturada && (
 				<Modal animationType="slide" transparent={false} visible={abrir}>
-					<View
-						style={{
-							flex: 1,
-							justifyContent: "center",
-							alignItems: "center",
-							margin: 20,
-						}}
-					>
-						<View style={{ margin: 10, flexDirection: "row" }}>
-							<TouchableOpacity
-								style={{ margin: 10 }}
-								onPress={() => setAbrir(false)}
-							>
-								<FontAwesome name="window-close" size={50} color="#FF0000" />
-							</TouchableOpacity>
-							<TouchableOpacity
-								style={{ margin: 10 }}
-								onPress={() => savePicture()}
-							>
-								<FontAwesome name="upload" size={50} color="#121212" />
-							</TouchableOpacity>
-						</View>
+					<View style={{ flex: 1 }}>
 						<Video
 							source={{ uri: fotoCapturada }}
 							rate={1.0}
 							volume={1.0}
 							isMuted={false}
 							resizeMode="cover"
-							shouldPlay={false}
+							shouldPlay={true}
 							isLooping
-							useNativeControls
-							style={{ width: "100%", height: "80%", flex: 1, zIndex: 1 }}
+							useNativeControls={false}
+							style={{ width: "100%", height: "100%", flex: 1 }}
 						/>
+
+						<View style={styles.accionesBotones}>
+							{/* Descargar video */}
+							<TouchableOpacity
+								style={{ margin: 10 }}
+								onPress={() => setAbrir(false)}
+							>
+								<Ionicons name="md-close-circle" size={50} color="#fff" />
+							</TouchableOpacity>
+
+							{/* Subir video y guardarlo en el dispositivo */}
+							<TouchableOpacity
+								style={{ margin: 10 }}
+								onPress={() => savePicture()}
+							>
+								<Ionicons name="md-send" size={50} color="#fff" />
+							</TouchableOpacity>
+
+							<TouchableOpacity style={{ margin: 10 }}>
+								<MaterialCommunityIcons name="sticker" size={50} color="#fff" />
+							</TouchableOpacity>
+						</View>
 					</View>
 				</Modal>
 			)}
@@ -242,5 +247,15 @@ const styles = StyleSheet.create({
 	grabar: {
 		justifyContent: "center",
 		alignItems: "center",
+	},
+	fondoVisualizacon: {
+		flex: 1,
+	},
+	accionesBotones: {
+		flexDirection: "row",
+		alignItems: "center",
+		position: "absolute",
+		left: 0,
+		bottom: 0,
 	},
 });
