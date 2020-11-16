@@ -8,8 +8,13 @@ import {
 	Image,
 	FlatList,
 	ActivityIndicator,
+	Dimensions,
 } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
+import MapView, { Marker } from "react-native-maps";
+import * as Permissions from "expo-permissions";
+import * as Location from "expo-location";
+import { ScrollView } from "react-native-gesture-handler";
 
 // export default function Home({ navigation }) {
 export default class Home extends PureComponent {
@@ -37,7 +42,7 @@ export default class Home extends PureComponent {
 		return (
 			<TouchableOpacity
 				style={card}
-				onPress={() => this.props.navigation.navigate("RecordInfo")}
+				onPress={() => this.props.navigation.navigate("ReportInfo")}
 			>
 				<Image
 					style={cardImage}
@@ -51,7 +56,7 @@ export default class Home extends PureComponent {
 	};
 
 	render() {
-		let { container, loader } = styles;
+		let { container, loader, map } = styles;
 		let { items } = this.state;
 
 		if (items.length === 0) {
@@ -61,12 +66,34 @@ export default class Home extends PureComponent {
 		}
 
 		return (
-			<FlatList
-				style={container}
-				data={items}
-				keyExtractor={(item, index) => index.toString()}
-				renderItem={this._renderReport}
-			/>
+			<ScrollView>
+				<View>
+					<MapView
+						style={map}
+						showUserLocation
+						followUserLocation
+						initialRegion={{
+							latitude: 23.19832,
+							longitude: -106.423208,
+							latitudeDelta: 0.002,
+							longitudeDelta: 0.001,
+						}}
+					>
+						<Marker
+							coordinate={{ latitude: 23.198212, longitude: -106.423884 }}
+							title="Test Reporte"
+							description="Descripción del reporte"
+						/>
+					</MapView>
+
+					<FlatList
+						style={container}
+						data={items}
+						keyExtractor={(item, index) => index.toString()}
+						renderItem={this._renderReport}
+					/>
+				</View>
+			</ScrollView>
 		);
 	}
 }
@@ -85,20 +112,26 @@ const styles = StyleSheet.create({
 		marginLeft: "2%",
 		width: "96%",
 		shadowColor: "#000",
-		shadowOpacity: 1,
+		shadowOpacity: 0.25,
 		shadowOffset: {
 			width: 3,
 			height: 3,
 		},
+		borderRadius: 5,
 	},
 	cardImage: {
 		width: "100%",
 		height: 200,
 		resizeMode: "cover",
+		borderTopRightRadius: 5,
+		borderTopLeftRadius: 5,
 	},
 	loader: {
 		flex: 1,
 		alignItems: "center",
 		justifyContent: "center",
+	},
+	map: {
+		height: 600,
 	},
 });

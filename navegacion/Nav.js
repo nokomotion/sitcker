@@ -2,7 +2,7 @@ import * as React from "react";
 import { Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 import Home from "../screens/home/Home";
 import RecordReport from "../screens/recordVideo";
@@ -16,16 +16,16 @@ export default function Nav() {
 		<Tab.Navigator
 			initialRouteName="Home"
 			tabBarOptions={{
-				activeTintColor: "#e91e63",
+				activeTintColor: "#9d0208",
 			}}
 		>
 			<Tab.Screen
 				name="Home"
 				component={Home}
 				options={{
-					tabBarLabel: "Home",
+					tabBarLabel: "Explorar",
 					tabBarIcon: ({ color, size }) => (
-						<MaterialCommunityIcons name="home" size={size} />
+						<MaterialIcons name="explore" size={24} color="black" />
 					),
 				}}
 			/>
@@ -33,7 +33,7 @@ export default function Nav() {
 				name="RecordReport"
 				component={RecordReport}
 				options={{
-					tabBarLabel: "Home",
+					tabBarLabel: "Grabar",
 					tabBarIcon: ({ color, size }) => (
 						<MaterialCommunityIcons name="camera" size={24} color="black" />
 					),
@@ -44,22 +44,22 @@ export default function Nav() {
 				name="Profile"
 				component={Profile}
 				options={{
-					tabBarLabel: "Profile",
+					tabBarLabel: "Perfil",
 					tabBarIcon: ({ color, size }) => (
 						<MaterialCommunityIcons name="account" size={size} />
 					),
 				}}
 			/>
-			<Tab.Screen
+			{/* <Tab.Screen
 				name="Imagenes"
 				component={Imagenes}
 				options={{
-					tabBarLabel: "Imagenes",
+					tabBarLabel: "Editar",
 					tabBarIcon: ({ color, size }) => (
-						<MaterialCommunityIcons name="account" size={size} />
+						<MaterialIcons name="edit" size={24} color="black" />
 					),
 				}}
-			/>
+			/> */}
 		</Tab.Navigator>
 	);
 }

@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import { Animated, StyleSheet, View, Image } from "react-native";
+import { Animated, StyleSheet, View, Image, Text } from "react-native";
 import {
 	PanGestureHandler,
 	ScrollView,
 	State,
 } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
+import { Video } from "expo-av";
 
 import { USE_NATIVE_DRIVER } from "../../config";
 
@@ -55,7 +57,8 @@ export class DraggableBox extends Component {
 						this.props.boxStyle,
 					]}
 					source={{
-						uri: "https://reactnative.dev/img/tiny_logo.png",
+						uri:
+							"https://www.polimex.mx/sitio2018/wp-content/uploads/2019/01/cfe-logo-color-polimex.png",
 					}}
 				/>
 			</PanGestureHandler>
@@ -64,10 +67,28 @@ export class DraggableBox extends Component {
 }
 
 export default class Example extends Component {
+	constructor(props) {
+		super(props);
+	}
+
 	render() {
+		const { videoCapturado } = this.props.route.params;
+
 		return (
 			<View style={styles.scrollView}>
 				<DraggableBox />
+
+				<Video
+					source={{ uri: videoCapturado }}
+					rate={1.0}
+					volume={1.0}
+					isMuted={false}
+					resizeMode="cover"
+					shouldPlay={true}
+					isLooping
+					useNativeControls={false}
+					style={{ width: "100%", height: "100%", flex: 1 }}
+				/>
 			</View>
 		);
 	}
@@ -78,10 +99,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	box: {
-		width: 150,
+		width: 250,
 		height: 150,
 		alignSelf: "center",
-		backgroundColor: "plum",
 		margin: 10,
 		zIndex: 200,
 	},

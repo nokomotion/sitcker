@@ -16,19 +16,21 @@ import {
 	Modal,
 	Image,
 	TextInput,
+	TouchableHighlight,
 } from "react-native";
 import { Video } from "expo-av";
 import * as MediaLibrary from "expo-media-library";
 import Imagenes from "../editVideo/draggable";
 
-export default function RecordReport() {
+export default function RecordReport({ navigation }) {
 	const camRef = useRef(null);
 	const [type, setType] = useState(Camera.Constants.Type.back);
 	const [hasPermission, setHaspermission] = useState(null);
 	const [recording, setRecording] = useState(false);
 	const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
-	const [fotoCapturada, SetfotoCapturada] = useState(null);
+	const [videoCapturado, SetvideoCapturado] = useState(null);
 	const [abrir, setAbrir] = useState(false);
+
 	useEffect(() => {
 		(async () => {
 			const { status } = await Camera.requestPermissionsAsync();
@@ -55,36 +57,38 @@ export default function RecordReport() {
 		return <Text>Acceso denegado!</Text>;
 	}
 
-	async function savePicture() {
-		const asset = await MediaLibrary.createAssetAsync(fotoCapturada)
-			.then(() => {
-				alert("Foto grabada");
-			})
-			.catch((error) => {
-				console.log("error", error);
-			});
-	}
-	async function tomarfoto() {
-		if (camRef) {
-			const data = await camRef.current.takePictureAsync();
-			SetfotoCapturada(data.uri);
-			setAbrir(true);
-			console.log(data);
-		}
-	}
+	// async function savePicture() {
+	// 	const asset = await MediaLibrary.createAssetAsync(videoCapturado)
+	// 		.then(() => {
+	// 			alert("Foto grabada");
+	// 		})
+	// 		.catch((error) => {
+	// 			console.log("error", error);
+	// 		});
+	// }
+	// async function tomarfoto() {
+	// 	if (camRef) {
+	// 		const data = await camRef.current.takePictureAsync();
+	// 		SetvideoCapturado(data.uri);
+	// 		setAbrir(true);
+	// 		console.log(data);
+	// 	}
+	// }
 	async function grabarVideo() {
+		let video;
+
 		if (!recording) {
 			setRecording(true);
 			const options = { quality: "360p", maxDuration: 30 };
-			let video = await camRef.current.recordAsync(options);
-			SetfotoCapturada(video.uri);
+			video = await camRef.current.recordAsync(options);
+			SetvideoCapturado(video.uri);
 			setAbrir(true);
 			console.log(video.uri);
 
 			/*NavigationPreloadManager.navigate('Video reporte', {
-        videoUri: video,
-        coordenadas: 'poner latitud y longitud...'
-      });*/
+        	videoUri: video,
+        	coordenadas: 'poner latitud y longitud...'
+      		});*/
 		} else {
 			setRecording(false);
 			camRef.current.stopRecording();
@@ -186,44 +190,79 @@ export default function RecordReport() {
 				</Text>
 			</View>
 
-			{fotoCapturada && (
-				<Modal animationType="slide" transparent={false} visible={abrir}>
+			{videoCapturado && (
+				<Modal animationType="slide" transparent={true} visible={abrir}>
 					<View style={{ flex: 1 }}>
-						<Video
-							source={{ uri: fotoCapturada }}
-							rate={1.0}
-							volume={1.0}
-							isMuted={false}
-							resizeMode="cover"
-							shouldPlay={true}
-							isLooping
-							useNativeControls={false}
-							style={{ width: "100%", height: "100%", flex: 1 }}
-						/>
+						<View style={styles.centeredView}>
+							<View style={styles.modalView}>
+								<Text style={styles.modalText}>
+									¿Seguro que quiere utilizar este video?
+								</Text>
 
-						<View style={styles.accionesBotones}>
-							{/* Descargar video */}
-							<TouchableOpacity
-								style={{ margin: 10 }}
-								onPress={() => setAbrir(false)}
-							>
-								<Ionicons name="md-close-circle" size={50} color="#fff" />
-							</TouchableOpacity>
+								{/* Botones para confirmar el video tomado */}
+								<View style={styles.modalBotones}>
+									<TouchableHighlight
+										style={{ ...styles.cancelarVideoBtn }}
+										onPress={() => {
+											setAbrir(false);
+										}}
+									>
+										<Text style={{ color: "black" }}>Cancelar</Text>
+									</TouchableHighlight>
 
-							{/* Subir video y guardarlo en el dispositivo */}
-							<TouchableOpacity
-								style={{ margin: 10 }}
-								onPress={() => savePicture()}
-							>
-								<Ionicons name="md-send" size={50} color="#fff" />
-							</TouchableOpacity>
-
-							<TouchableOpacity style={{ margin: 10 }}>
-								<MaterialCommunityIcons name="sticker" size={50} color="#fff" />
-							</TouchableOpacity>
+									<TouchableHighlight
+										style={{ ...styles.aceptarVideoBtn }}
+										onPress={() => {
+											setAbrir(false);
+											// Cambiar de pantalla y mandar la uri del video capturado después de aceptar
+											navigation.navigate("Imagenes", videoCapturado);
+										}}
+									>
+										<Text style={{ color: "white" }}>Aceptar</Text>
+									</TouchableHighlight>
+								</View>
+							</View>
 						</View>
 					</View>
 				</Modal>
+
+				// <Modal animationType="slide" transparent={false} visible={abrir}>
+				// 	<View style={{ flex: 1 }}>
+				// 		<Video
+				// 			source={{ uri: videoCapturado }}
+				// 			rate={1.0}
+				// 			volume={1.0}
+				// 			isMuted={false}
+				// 			resizeMode="cover"
+				// 			shouldPlay={true}
+				// 			isLooping
+				// 			useNativeControls={false}
+				// 			style={{ width: "100%", height: "100%", flex: 1 }}
+				// 		/>
+
+				// 		<View style={styles.accionesBotones}>
+				// 			{/* Descargar video */}
+				// 			<TouchableOpacity
+				// 				style={{ margin: 10 }}
+				// 				onPress={() => setAbrir(false)}
+				// 			>
+				// 				<Ionicons name="md-close-circle" size={50} color="#fff" />
+				// 			</TouchableOpacity>
+
+				// 			{/* Subir video y guardarlo en el dispositivo */}
+				// 			<TouchableOpacity
+				// 				style={{ margin: 10 }}
+				// 				onPress={() => savePicture()}
+				// 			>
+				// 				<Ionicons name="md-send" size={50} color="#fff" />
+				// 			</TouchableOpacity>
+
+				// 			<TouchableOpacity style={{ margin: 10 }}>
+				// 				<MaterialCommunityIcons name="sticker" size={50} color="#fff" />
+				// 			</TouchableOpacity>
+				// 		</View>
+				// 	</View>
+				// </Modal>
 			)}
 		</View>
 	);
@@ -257,5 +296,42 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0,
 		bottom: 0,
+	},
+	centeredView: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		marginTop: 22,
+	},
+	modalView: {
+		margin: 20,
+		backgroundColor: "white",
+		borderRadius: 5,
+		padding: 35,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		elevation: 5,
+	},
+	modalText: {
+		marginBottom: 15,
+		textAlign: "center",
+	},
+	modalBotones: {
+		alignContent: "flex-end",
+	},
+	aceptarVideoBtn: {
+		backgroundColor: "#006600",
+		borderRadius: 3,
+		padding: 10,
+		elevation: 2,
+	},
+	cancelarVideoBtn: {
+		backgroundColor: "white",
+		padding: 10,
 	},
 });
