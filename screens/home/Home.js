@@ -132,6 +132,6 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	map: {
-		height: 600,
+		height: 400,
 	},
 });

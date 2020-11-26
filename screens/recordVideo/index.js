@@ -20,7 +20,8 @@ import {
 } from "react-native";
 import { Video } from "expo-av";
 import * as MediaLibrary from "expo-media-library";
-import Imagenes from "../editVideo/draggable";
+
+import EditVideo from "../editVideo/";
 
 export default function RecordReport({ navigation }) {
 	const camRef = useRef(null);
@@ -28,7 +29,7 @@ export default function RecordReport({ navigation }) {
 	const [hasPermission, setHaspermission] = useState(null);
 	const [recording, setRecording] = useState(false);
 	const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
-	const [videoCapturado, SetvideoCapturado] = useState(null);
+	const [videoCapturado, setVideoCapturado] = useState(null);
 	const [abrir, setAbrir] = useState(false);
 
 	useEffect(() => {
@@ -69,11 +70,12 @@ export default function RecordReport({ navigation }) {
 	// async function tomarfoto() {
 	// 	if (camRef) {
 	// 		const data = await camRef.current.takePictureAsync();
-	// 		SetvideoCapturado(data.uri);
+	// 		setVideoCapturado(data.uri);
 	// 		setAbrir(true);
 	// 		console.log(data);
 	// 	}
 	// }
+
 	async function grabarVideo() {
 		let video;
 
@@ -81,7 +83,7 @@ export default function RecordReport({ navigation }) {
 			setRecording(true);
 			const options = { quality: "360p", maxDuration: 30 };
 			video = await camRef.current.recordAsync(options);
-			SetvideoCapturado(video.uri);
+			setVideoCapturado(video.uri);
 			setAbrir(true);
 			console.log(video.uri);
 
@@ -215,7 +217,12 @@ export default function RecordReport({ navigation }) {
 										onPress={() => {
 											setAbrir(false);
 											// Cambiar de pantalla y mandar la uri del video capturado después de aceptar
-											navigation.navigate("Imagenes", videoCapturado);
+											navigation.navigate("EditVideo", { setVideoCapturado });
+
+											/*NavigationPreloadManager.navigate('Video reporte', {
+        									videoUri: video,
+        									coordenadas: 'poner latitud y longitud...'
+      										});*/
 										}}
 									>
 										<Text style={{ color: "white" }}>Aceptar</Text>

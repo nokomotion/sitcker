@@ -6,8 +6,8 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 import Home from "../screens/home/Home";
 import RecordReport from "../screens/recordVideo";
-import Profile from "../screens/profile/Profile";
-import Imagenes from "../screens/editVideo/draggable";
+import Profile from "../screens/profile";
+import EditVideo from "../screens/editVideo";
 
 const Tab = createBottomTabNavigator();
 
@@ -50,16 +50,16 @@ export default function Nav() {
 					),
 				}}
 			/>
-			{/* <Tab.Screen
-				name="Imagenes"
-				component={Imagenes}
+			<Tab.Screen
+				name="EditVideo"
+				component={EditVideo}
 				options={{
 					tabBarLabel: "Editar",
 					tabBarIcon: ({ color, size }) => (
 						<MaterialIcons name="edit" size={24} color="black" />
 					),
 				}}
-			/> */}
+			/>
 		</Tab.Navigator>
 	);
 }
