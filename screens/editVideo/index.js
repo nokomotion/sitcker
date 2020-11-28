@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, PureComponent } from "react";
 import {
 	Animated,
 	StyleSheet,
@@ -11,26 +11,70 @@ import {
 	FlatList,
 	Alert,
 } from "react-native";
-import {
-	PanGestureHandler,
-	ScrollView,
-	State,
-} from "react-native-gesture-handler";
+import { PanGestureHandler, ScrollView, State } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Video } from "expo-av";
-import {
-	FontAwesome,
-	Ionicons,
-	MaterialCommunityIcons,
-} from "@expo/vector-icons";
-import { DragResizeBlock } from "react-native-drag-resize";
+import { FontAwesome, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { USE_NATIVE_DRIVER } from "../../config";
+
+import {
+	DragResizeBlock,
+	DragResizeContainer,
+	AXIS_X,
+	AXIS_Y,
+	AXIS_ALL,
+	CONNECTOR_TOP_LEFT,
+	CONNECTOR_TOP_MIDDLE,
+	CONNECTOR_TOP_RIGHT,
+	CONNECTOR_MIDDLE_RIGHT,
+	CONNECTOR_BOTTOM_RIGHT,
+	CONNECTOR_BOTTOM_MIDDLE,
+	CONNECTOR_BOTTOM_LEFT,
+	CONNECTOR_MIDDLE_LEFT,
+	CONNECTOR_CENTER,
+} from "react-native-drag-resize";
+
+// Class component to test draggable component
+class Container extends PureComponent {
+	render() {
+		const { children, title, onInit } = this.props;
+
+		return (
+			<View style={styles.container}>
+				<Text style={styles.title}>{title}</Text>
+
+				<DragResizeContainer style={styles.canvas} onInit={onInit}>
+					{children}
+				</DragResizeContainer>
+			</View>
+		);
+	}
+}
+
+const ON_RESIZE_START = 0;
+const ON_RESIZE = 1;
+const ON_RESIZE_END = 2;
+const ON_DRAG_START = 3;
+const ON_DRAG = 4;
+const ON_DRAG_END = 5;
 
 export default class EditVideo extends Component {
 	constructor(props) {
 		super(props);
 
+		const defaultLimitation = {
+			x: 0,
+			y: 0,
+			w: 0,
+			h: 0,
+		};
+
 		this.state = {
+			// Draggable test
+			currentEvent: null,
+			selectedBlock: null,
+			limitation: { ...defaultLimitation },
+
 			data: [
 				{ id: 1, image: "https://lorempixel.com/400/200/nature/6/" },
 				{ id: 2, image: "https://lorempixel.com/400/200/nature/5/" },
@@ -41,13 +85,88 @@ export default class EditVideo extends Component {
 				{ id: 7, image: "https://lorempixel.com/400/200/nature/1/" },
 				{ id: 8, image: "https://lorempixel.com/400/200/nature/3/" },
 				{ id: 9, image: "https://lorempixel.com/400/200/nature/4/" },
-				{ id: 9, image: "https://lorempixel.com/400/200/nature/5/" },
+				{ id: 10, image: "https://lorempixel.com/400/200/nature/5/" },
 			],
 		};
 	}
 
+	// Draggable
+	callEventHandler(event, message) {
+		if (this.state.currentEvent !== event) {
+			this.setState(() => {
+				this.state.currentEvent = event;
+				return this.state;
+			});
+			ToastAndroid.show(message, ToastAndroid.SHORT);
+		}
+	}
+
+	renderTwoItems = () => {
+		const { selectedBlock, limitation5 } = this.state;
+
+		const BLOCK_0 = 0;
+		const BLOCK_1 = 1;
+
+		return (
+			<Container
+				onInit={(limitation) => {
+					this.setState(() => {
+						this.state.limitation5 = limitation;
+						return this.state;
+					});
+				}}
+			>
+				<DragResizeBlock
+					x={0}
+					y={0}
+					w={80}
+					h={80}
+					limitation={limitation5}
+					isDisabled={BLOCK_0 !== selectedBlock}
+					onPress={() => {
+						this.setState(() => {
+							this.state.selectedBlock = BLOCK_0;
+							return this.state;
+						});
+					}}
+				>
+					<View
+						style={{
+							width: "100%",
+							height: "100%",
+							backgroundColor: "red",
+						}}
+					/>
+				</DragResizeBlock>
+
+				<DragResizeBlock
+					x={80}
+					y={80}
+					w={80}
+					h={80}
+					limitation={limitation5}
+					isDisabled={BLOCK_1 !== selectedBlock}
+					onPress={() => {
+						this.setState(() => {
+							this.state.selectedBlock = BLOCK_1;
+							return this.state;
+						});
+					}}
+				>
+					<View
+						style={{
+							width: "100%",
+							height: "100%",
+							backgroundColor: "green",
+						}}
+					/>
+				</DragResizeBlock>
+			</Container>
+		);
+	};
+
 	addSticker = () => {
-		Alert.alert("Sticker", "Sticker puesto...");
+		Alert.alert("Acción", "Acción de poner de sticker sobre video");
 	};
 
 	state = {
@@ -64,6 +183,9 @@ export default class EditVideo extends Component {
 
 		return (
 			<View style={{ flex: 1 }}>
+				{/* Draggable test */}
+				{this.renderTwoItems()}
+
 				<Modal
 					animationType="slide"
 					transparent={true}
@@ -82,44 +204,18 @@ export default class EditVideo extends Component {
 								data={this.state.data}
 								horizontal={false}
 								numColumns={2}
-								keyExtractor={(item) => {
-									return <View style={styles.separator} />;
-								}}
-								ItemSeparatorComponent={() => {
-									return <View style={styles.separator} />;
-								}}
 								renderItem={(post) => {
 									const item = post.item;
 
 									return (
 										<View style={styles.card}>
-											<Image
-												style={styles.cardImage}
-												source={{ uri: item.image }}
-											/>
-											<View style={styles.cardFooter}>
-												<View style={styles.socialBarContainer}>
-													<View style={styles.socialBarSection}>
-														<TouchableOpacity
-															style={styles.socialBarButton}
-															onPress={() => this.addSticker()}
-														>
-															<Image
-																style={styles.icon}
-																source={{
-																	uri:
-																		"https://png.icons8.com/flat_round/50/000000/share.png",
-																}}
-															/>
-															<Text
-																style={[styles.socialBarLabel, styles.share]}
-															>
-																Usar
-															</Text>
-														</TouchableOpacity>
-													</View>
-												</View>
-											</View>
+											<TouchableOpacity
+												onPress={() => {
+													this.addSticker();
+												}}
+											>
+												<Image style={styles.cardImage} source={{ uri: item.image }} />
+											</TouchableOpacity>
 										</View>
 									);
 								}}
@@ -166,10 +262,7 @@ export default class EditVideo extends Component {
 						<Ionicons name="md-send" size={50} color="#fff" />
 					</TouchableOpacity>
 
-					<TouchableOpacity
-						style={{ margin: 10 }}
-						onPress={() => this.setModalVisible(true)}
-					>
+					<TouchableOpacity style={{ margin: 10 }} onPress={() => this.setModalVisible(true)}>
 						<MaterialCommunityIcons name="sticker" size={50} color="#fff" />
 					</TouchableOpacity>
 				</View>
@@ -246,16 +339,17 @@ const styles = StyleSheet.create({
 	modalText: {
 		marginBottom: 15,
 		textAlign: "center",
+		fontSize: 22,
 	},
 	modalBotones: {
 		alignContent: "flex-end",
 	},
 	aceptarVideoBtn: {
-		backgroundColor: "#006600",
+		backgroundColor: "#4CAF50",
 		borderRadius: 3,
 		padding: 10,
 		elevation: 2,
-		color: "white",
+		color: "#fff",
 	},
 	cancelarVideoBtn: {
 		backgroundColor: "white",
@@ -278,54 +372,20 @@ const styles = StyleSheet.create({
 	listContainer: {
 		alignItems: "center",
 	},
-	separator: {
-		marginTop: 10,
-	},
 	card: {
 		marginVertical: 8,
 		flexBasis: "50%",
 		marginHorizontal: 5,
-	},
-	cardFooter: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		paddingTop: 12.5,
-		paddingBottom: 25,
-		paddingHorizontal: 16,
-		borderBottomLeftRadius: 1,
-		borderBottomRightRadius: 1,
 	},
 	cardImage: {
 		flex: 1,
 		height: 150,
 		width: null,
 	},
-	share: {
-		color: "#25b7d3",
-	},
-	icon: {
-		width: 25,
-		height: 25,
-	},
-	socialBarContainer: {
-		justifyContent: "center",
-		alignItems: "center",
-		flexDirection: "row",
-		flex: 1,
-	},
-	socialBarSection: {
-		justifyContent: "center",
-		flexDirection: "row",
-		flex: 1,
-	},
-	socialBarlabel: {
-		marginLeft: 8,
-		alignSelf: "flex-end",
-		justifyContent: "center",
-	},
-	socialBarButton: {
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center",
+	canvas: {
+		width: "100%",
+		height: "100%",
+		backgroundColor: "#D1D5DA",
+		marginTop: 4,
 	},
 });

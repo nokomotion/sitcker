@@ -40,10 +40,7 @@ export default class Home extends PureComponent {
 	_renderReport = ({ item, index }) => {
 		let { cardText, card, cardImage } = styles;
 		return (
-			<TouchableOpacity
-				style={card}
-				onPress={() => this.props.navigation.navigate("ReportInfo")}
-			>
+			<TouchableOpacity style={card} onPress={() => this.props.navigation.navigate("ReportInfo")}>
 				<Image
 					style={cardImage}
 					source={{
