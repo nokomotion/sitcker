@@ -6,6 +6,10 @@ import {
 	Image,
 	Text,
 	TouchableOpacity,
+	TouchableHighlight,
+	Modal,
+	FlatList,
+	Alert,
 } from "react-native";
 import {
 	PanGestureHandler,
@@ -20,101 +24,118 @@ import {
 	MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { DragResizeBlock } from "react-native-drag-resize";
-
 import { USE_NATIVE_DRIVER } from "../../config";
-
-export class DraggableBox extends Component {
-	constructor(props) {
-		super(props);
-		this._translateX = new Animated.Value(0);
-		this._translateY = new Animated.Value(0);
-		this._lastOffset = { x: 0, y: 0 };
-		this._onGestureEvent = Animated.event(
-			[
-				{
-					nativeEvent: {
-						translationX: this._translateX,
-						translationY: this._translateY,
-					},
-				},
-			],
-			{ useNativeDriver: USE_NATIVE_DRIVER }
-		);
-	}
-	_onHandlerStateChange = (event) => {
-		if (event.nativeEvent.oldState === State.ACTIVE) {
-			this._lastOffset.x += event.nativeEvent.translationX;
-			this._lastOffset.y += event.nativeEvent.translationY;
-			this._translateX.setOffset(this._lastOffset.x);
-			this._translateX.setValue(0);
-			this._translateY.setOffset(this._lastOffset.y);
-			this._translateY.setValue(0);
-		}
-	};
-	render() {
-		return (
-			<PanGestureHandler
-				{...this.props}
-				onGestureEvent={this._onGestureEvent}
-				onHandlerStateChange={this._onHandlerStateChange}
-			>
-				<Animated.Image
-					style={[
-						styles.box,
-						{
-							transform: [
-								{ translateX: this._translateX },
-								{ translateY: this._translateY },
-							],
-						},
-						this.props.boxStyle,
-					]}
-					source={{
-						uri:
-							"https://www.polimex.mx/sitio2018/wp-content/uploads/2019/01/cfe-logo-color-polimex.png",
-					}}
-				/>
-			</PanGestureHandler>
-		);
-	}
-}
 
 export default class EditVideo extends Component {
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			data: [
+				{ id: 1, image: "https://lorempixel.com/400/200/nature/6/" },
+				{ id: 2, image: "https://lorempixel.com/400/200/nature/5/" },
+				{ id: 3, image: "https://lorempixel.com/400/200/nature/4/" },
+				{ id: 4, image: "https://lorempixel.com/400/200/nature/6/" },
+				{ id: 5, image: "https://lorempixel.com/400/200/sports/1/" },
+				{ id: 6, image: "https://lorempixel.com/400/200/nature/8/" },
+				{ id: 7, image: "https://lorempixel.com/400/200/nature/1/" },
+				{ id: 8, image: "https://lorempixel.com/400/200/nature/3/" },
+				{ id: 9, image: "https://lorempixel.com/400/200/nature/4/" },
+				{ id: 9, image: "https://lorempixel.com/400/200/nature/5/" },
+			],
+		};
 	}
+
+	addSticker = () => {
+		Alert.alert("Sticker", "Sticker puesto...");
+	};
+
+	state = {
+		modalVisible: false,
+	};
+
+	setModalVisible = (visible) => {
+		this.setState({ modalVisible: visible });
+	};
 
 	render() {
 		// const { setVideoCapturado } = this.props.route.params;
-		// const [modalVisible, setModalVisible] = useState(false);
+		const { modalVisible } = this.state;
 
 		return (
 			<View style={{ flex: 1 }}>
-				<DraggableBox />
-
-				{/* <Modal
+				<Modal
 					animationType="slide"
 					transparent={true}
 					visible={modalVisible}
 					onRequestClose={() => {
-						Alert.alert("Modal has been closed.");
+						// Alert.alert("Modal has been closed!");
 					}}
 				>
 					<View style={styles.centeredView}>
 						<View style={styles.modalView}>
-							<Text style={styles.modalText}>Hello World!</Text>
+							<Text style={styles.modalText}>Seleccione un Sticker a usar</Text>
+
+							<FlatList
+								style={styles.list}
+								contentContainerStyle={styles.listContainer}
+								data={this.state.data}
+								horizontal={false}
+								numColumns={2}
+								keyExtractor={(item) => {
+									return <View style={styles.separator} />;
+								}}
+								ItemSeparatorComponent={() => {
+									return <View style={styles.separator} />;
+								}}
+								renderItem={(post) => {
+									const item = post.item;
+
+									return (
+										<View style={styles.card}>
+											<Image
+												style={styles.cardImage}
+												source={{ uri: item.image }}
+											/>
+											<View style={styles.cardFooter}>
+												<View style={styles.socialBarContainer}>
+													<View style={styles.socialBarSection}>
+														<TouchableOpacity
+															style={styles.socialBarButton}
+															onPress={() => this.addSticker()}
+														>
+															<Image
+																style={styles.icon}
+																source={{
+																	uri:
+																		"https://png.icons8.com/flat_round/50/000000/share.png",
+																}}
+															/>
+															<Text
+																style={[styles.socialBarLabel, styles.share]}
+															>
+																Usar
+															</Text>
+														</TouchableOpacity>
+													</View>
+												</View>
+											</View>
+										</View>
+									);
+								}}
+							/>
 
 							<TouchableHighlight
-								style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+								style={{ ...styles.aceptarVideoBtn }}
 								onPress={() => {
-									setModalVisible(!modalVisible);
+									this.setModalVisible(!modalVisible);
 								}}
 							>
-								<Text style={styles.textStyle}>Hide Modal</Text>
+								<Text>Aceptar</Text>
 							</TouchableHighlight>
 						</View>
 					</View>
-				</Modal> */}
+				</Modal>
 
 				<Video
 					source={{ uri: "https://i.imgur.com/1WQ4gdK.mp4" }}
@@ -132,7 +153,7 @@ export default class EditVideo extends Component {
 					{/* Descargar video */}
 					<TouchableOpacity
 						style={{ margin: 10 }}
-						onPress={() => setArir(false)}
+						// onPress={() => setArir(false)}
 					>
 						<Ionicons name="md-close-circle" size={50} color="#fff" />
 					</TouchableOpacity>
@@ -147,7 +168,7 @@ export default class EditVideo extends Component {
 
 					<TouchableOpacity
 						style={{ margin: 10 }}
-						onPress={() => setModalVisible(true)}
+						onPress={() => this.setModalVisible(true)}
 					>
 						<MaterialCommunityIcons name="sticker" size={50} color="#fff" />
 					</TouchableOpacity>
@@ -234,6 +255,7 @@ const styles = StyleSheet.create({
 		borderRadius: 3,
 		padding: 10,
 		elevation: 2,
+		color: "white",
 	},
 	cancelarVideoBtn: {
 		backgroundColor: "white",
@@ -245,5 +267,65 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 		margin: 10,
 		zIndex: 200,
+	},
+	container: {
+		flex: 1,
+		marginTop: 20,
+	},
+	list: {
+		paddingHorizontal: 5,
+	},
+	listContainer: {
+		alignItems: "center",
+	},
+	separator: {
+		marginTop: 10,
+	},
+	card: {
+		marginVertical: 8,
+		flexBasis: "50%",
+		marginHorizontal: 5,
+	},
+	cardFooter: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		paddingTop: 12.5,
+		paddingBottom: 25,
+		paddingHorizontal: 16,
+		borderBottomLeftRadius: 1,
+		borderBottomRightRadius: 1,
+	},
+	cardImage: {
+		flex: 1,
+		height: 150,
+		width: null,
+	},
+	share: {
+		color: "#25b7d3",
+	},
+	icon: {
+		width: 25,
+		height: 25,
+	},
+	socialBarContainer: {
+		justifyContent: "center",
+		alignItems: "center",
+		flexDirection: "row",
+		flex: 1,
+	},
+	socialBarSection: {
+		justifyContent: "center",
+		flexDirection: "row",
+		flex: 1,
+	},
+	socialBarlabel: {
+		marginLeft: 8,
+		alignSelf: "flex-end",
+		justifyContent: "center",
+	},
+	socialBarButton: {
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
 	},
 });
