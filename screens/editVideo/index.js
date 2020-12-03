@@ -109,6 +109,9 @@ export default class EditVideo extends Component {
 		const BLOCK_0 = 0;
 		const BLOCK_1 = 1;
 
+		const { uriVideoCapturado } = this.props.route.params;
+		const { modalVisible } = this.state;
+
 		return (
 			<Container
 				onInit={(limitation) => {
@@ -118,6 +121,89 @@ export default class EditVideo extends Component {
 					});
 				}}
 			>
+				<View style={{ flex: 1 }}>
+					<Modal
+						animationType="slide"
+						transparent={true}
+						visible={modalVisible}
+						onRequestClose={() => {
+							// Alert.alert("Modal has been closed!");
+						}}
+					>
+						<View style={styles.centeredView}>
+							<View style={styles.modalView}>
+								<Text style={styles.modalText}>Seleccione un Sticker a usar</Text>
+
+								<FlatList
+									style={styles.list}
+									contentContainerStyle={styles.listContainer}
+									data={this.state.data}
+									horizontal={false}
+									numColumns={2}
+									renderItem={(post) => {
+										const item = post.item;
+
+										return (
+											<View style={styles.card}>
+												<TouchableOpacity
+													onPress={() => {
+														this.addSticker();
+													}}
+												>
+													<Image style={styles.cardImage} source={{ uri: item.image }} />
+												</TouchableOpacity>
+											</View>
+										);
+									}}
+								/>
+
+								<TouchableHighlight
+									style={{ ...styles.aceptarVideoBtn }}
+									onPress={() => {
+										this.setModalVisible(!modalVisible);
+									}}
+								>
+									<Text>Aceptar</Text>
+								</TouchableHighlight>
+							</View>
+						</View>
+					</Modal>
+
+					<Video
+						source={{ uri: uriVideoCapturado }}
+						rate={1.0}
+						volume={1.0}
+						isMuted={false}
+						resizeMode="cover"
+						shouldPlay={true}
+						isLooping
+						useNativeControls={false}
+						style={{ width: "100%", height: "100%", flex: 1 }}
+					/>
+
+					<View style={styles.accionesBotones}>
+						{/* Descartar video y regresar a la pantalla de recordVideo */}
+						<TouchableOpacity
+							style={{ margin: 10 }}
+							// onPress={() => setArir(false)}
+						>
+							<Ionicons name="md-close-circle" size={50} color="#fff" />
+						</TouchableOpacity>
+
+						{/* Subir video */}
+						<TouchableOpacity
+							style={{ margin: 10 }}
+							// onPress={() => savePicture()}
+						>
+							<Ionicons name="md-send" size={50} color="#fff" />
+						</TouchableOpacity>
+
+						<TouchableOpacity style={{ margin: 10 }} onPress={() => this.setModalVisible(true)}>
+							<MaterialCommunityIcons name="sticker" size={50} color="#fff" />
+						</TouchableOpacity>
+					</View>
+				</View>
+
 				<DragResizeBlock
 					x={0}
 					y={0}
@@ -192,7 +278,7 @@ export default class EditVideo extends Component {
 				{/* Draggable test */}
 				{this.renderTwoItems()}
 
-				<Modal
+				{/* <Modal
 					animationType="slide"
 					transparent={true}
 					visible={modalVisible}
@@ -252,7 +338,6 @@ export default class EditVideo extends Component {
 				/>
 
 				<View style={styles.accionesBotones}>
-					{/* Descargar video */}
 					<TouchableOpacity
 						style={{ margin: 10 }}
 						// onPress={() => setArir(false)}
@@ -260,7 +345,6 @@ export default class EditVideo extends Component {
 						<Ionicons name="md-close-circle" size={50} color="#fff" />
 					</TouchableOpacity>
 
-					{/* Subir video */}
 					<TouchableOpacity
 						style={{ margin: 10 }}
 						// onPress={() => savePicture()}
@@ -271,7 +355,7 @@ export default class EditVideo extends Component {
 					<TouchableOpacity style={{ margin: 10 }} onPress={() => this.setModalVisible(true)}>
 						<MaterialCommunityIcons name="sticker" size={50} color="#fff" />
 					</TouchableOpacity>
-				</View>
+				</View> */}
 			</View>
 		);
 	}
