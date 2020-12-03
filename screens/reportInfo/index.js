@@ -1,13 +1,5 @@
 import React from "react";
-import {
-	View,
-	StyleSheet,
-	Text,
-	Image,
-	SafeAreaView,
-	Dimensions,
-	ScrollView,
-} from "react-native";
+import { View, StyleSheet, Text, Image, SafeAreaView, Dimensions, ScrollView } from "react-native";
 import { Video } from "expo-av";
 import { StackNavigator } from "react-navigation";
 import Home from "../home/Home";
@@ -15,11 +7,11 @@ import Home from "../home/Home";
 const { widthVideo, heightVideo } = Dimensions.get("window");
 // Image.getSize('../.././assets/hack.png', (width, height) => {this.setState({width, height})});
 
-const Navigation = StackNavigator({
-	Home: {
-		screen: Home,
-	},
-});
+// const Navigation = StackNavigator({
+// 	Home: {
+// 		screen: Home,
+// 	},
+// });
 
 const ReportInfo = ({ navigation }) => {
 	return (
@@ -38,10 +30,7 @@ const ReportInfo = ({ navigation }) => {
 						style={{ width: 420, height: 680, flex: 1, zIndex: 1 }}
 					/>
 
-					<Image
-						style={styles.stickerPos}
-						source={{ uri: "https://www.hackathones.mx/img/supporters/3.png" }}
-					/>
+					<Image style={styles.stickerPos} source={{ uri: "https://www.hackathones.mx/img/supporters/3.png" }} />
 				</View>
 			</ScrollView>
 		</SafeAreaView>

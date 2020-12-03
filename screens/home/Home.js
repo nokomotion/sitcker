@@ -10,11 +10,12 @@ import {
 	ActivityIndicator,
 	Dimensions,
 } from "react-native";
-import { createStackNavigator } from "react-navigation-stack";
+import { StackNavigator } from "react-navigation-stack";
 import MapView, { Marker } from "react-native-maps";
 import * as Permissions from "expo-permissions";
 import * as Location from "expo-location";
 import { ScrollView } from "react-native-gesture-handler";
+import ReportInfo from "../reportInfo";
 
 // export default function Home({ navigation }) {
 export default class Home extends PureComponent {

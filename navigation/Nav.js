@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
@@ -8,8 +9,10 @@ import Home from "../screens/home/Home";
 import RecordReport from "../screens/recordVideo";
 import Profile from "../screens/profile";
 import EditVideo from "../screens/editVideo";
+import ReportInfo from "../screens/reportInfo";
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 export default function Nav() {
 	return (
@@ -24,9 +27,7 @@ export default function Nav() {
 				component={Home}
 				options={{
 					tabBarLabel: "Explorar",
-					tabBarIcon: ({ color, size }) => (
-						<MaterialIcons name="explore" size={24} color="black" />
-					),
+					tabBarIcon: ({ color, size }) => <MaterialIcons name="explore" size={24} color="black" />,
 				}}
 			/>
 			<Tab.Screen
@@ -34,9 +35,7 @@ export default function Nav() {
 				component={RecordReport}
 				options={{
 					tabBarLabel: "Grabar",
-					tabBarIcon: ({ color, size }) => (
-						<MaterialCommunityIcons name="camera" size={24} color="black" />
-					),
+					tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="camera" size={24} color="black" />,
 				}}
 			/>
 
@@ -45,9 +44,7 @@ export default function Nav() {
 				component={Profile}
 				options={{
 					tabBarLabel: "Perfil",
-					tabBarIcon: ({ color, size }) => (
-						<MaterialCommunityIcons name="account" size={size} />
-					),
+					tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="account" size={size} />,
 				}}
 			/>
 			<Tab.Screen
@@ -55,9 +52,7 @@ export default function Nav() {
 				component={EditVideo}
 				options={{
 					tabBarLabel: "Editar",
-					tabBarIcon: ({ color, size }) => (
-						<MaterialIcons name="edit" size={24} color="black" />
-					),
+					tabBarIcon: ({ color, size }) => <MaterialIcons name="edit" size={24} color="black" />,
 				}}
 			/>
 		</Tab.Navigator>

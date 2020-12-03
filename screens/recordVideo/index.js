@@ -217,7 +217,7 @@ export default function RecordReport({ navigation }) {
 										onPress={() => {
 											setAbrir(false);
 											// Cambiar de pantalla y mandar la uri del video capturado después de aceptar
-											navigation.navigate("EditVideo", { setVideoCapturado });
+											navigation.navigate("EditVideo", { uriVideoCapturado: videoCapturado });
 
 											/*NavigationPreloadManager.navigate('Video reporte', {
         									videoUri: video,

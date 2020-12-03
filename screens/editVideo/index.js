@@ -88,6 +88,8 @@ export default class EditVideo extends Component {
 				{ id: 10, image: "https://lorempixel.com/400/200/nature/5/" },
 			],
 		};
+
+		// console.log(this.props.route.params.uriVideoCapturado);
 	}
 
 	// Draggable
@@ -134,16 +136,20 @@ export default class EditVideo extends Component {
 						style={{
 							width: "100%",
 							height: "100%",
-							backgroundColor: "red",
 						}}
-					/>
+					>
+						<Image
+							style={{ width: "100%", height: "100%" }}
+							source={{ uri: "https://avatars1.githubusercontent.com/u/43972787?s=200&v=4" }}
+						/>
+					</View>
 				</DragResizeBlock>
 
 				<DragResizeBlock
-					x={80}
-					y={80}
-					w={80}
-					h={80}
+					x={100}
+					y={100}
+					w={200}
+					h={200}
 					limitation={limitation5}
 					isDisabled={BLOCK_1 !== selectedBlock}
 					onPress={() => {
@@ -153,11 +159,11 @@ export default class EditVideo extends Component {
 						});
 					}}
 				>
-					<View
-						style={{
-							width: "100%",
-							height: "100%",
-							backgroundColor: "green",
+					<Image
+						style={{ width: 200, height: 200 }}
+						source={{
+							uri:
+								"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.W5bqrBZrmtg8qBZ2JR-xfwHaHa%26pid%3DApi&f=1",
 						}}
 					/>
 				</DragResizeBlock>
@@ -178,7 +184,7 @@ export default class EditVideo extends Component {
 	};
 
 	render() {
-		// const { setVideoCapturado } = this.props.route.params;
+		const { uriVideoCapturado } = this.props.route.params;
 		const { modalVisible } = this.state;
 
 		return (
@@ -234,7 +240,7 @@ export default class EditVideo extends Component {
 				</Modal>
 
 				<Video
-					source={{ uri: "https://i.imgur.com/1WQ4gdK.mp4" }}
+					source={{ uri: uriVideoCapturado }}
 					rate={1.0}
 					volume={1.0}
 					isMuted={false}
@@ -254,7 +260,7 @@ export default class EditVideo extends Component {
 						<Ionicons name="md-close-circle" size={50} color="#fff" />
 					</TouchableOpacity>
 
-					{/* Subir video y guardarlo en el dispositivo */}
+					{/* Subir video */}
 					<TouchableOpacity
 						style={{ margin: 10 }}
 						// onPress={() => savePicture()}
@@ -267,22 +273,6 @@ export default class EditVideo extends Component {
 					</TouchableOpacity>
 				</View>
 			</View>
-
-			// <View style={styles.scrollView}>
-			// 	<DraggableBox />
-
-			// 	<Video
-			// 		source={{ uri: setVideoCapturado.uri }}
-			// 		rate={1.0}
-			// 		volume={1.0}
-			// 		isMuted={false}
-			// 		resizeMode="cover"
-			// 		shouldPlay={true}
-			// 		isLooping
-			// 		useNativeControls={false}
-			// 		style={{ width: "100%", height: "100%", flex: 1 }}
-			// 	/>
-			// </View>
 		);
 	}
 }
