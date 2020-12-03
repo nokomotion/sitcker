@@ -20,24 +20,3 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 });
-
-			return <IconComponent name = {iconName} size = {25} color = {tintColor}/>
-		}	
-	}),
-	tabBarOptions:{
-		activeTintColor: '#fff',
-		activeBackgroundColor: '#000',
-
-		keyboardHidesTabBar: false,
-		tabStyle: {
-			backgroundColor: '#000'
-		},
-
-		labelStyle: {
-			fontSize: 12,
-		}
-	}
-})
-
-const App = createAppContainer(tabNavigator)
-export default App
