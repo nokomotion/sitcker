@@ -10,6 +10,7 @@ import {
 	Modal,
 	FlatList,
 	Alert,
+	Platform,
 } from "react-native";
 import { PanGestureHandler, ScrollView, State } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
@@ -59,38 +60,67 @@ const ON_DRAG = 4;
 const ON_DRAG_END = 5;
 
 export default class EditVideo extends Component {
-	constructor(props) {
-		super(props);
-
-		const defaultLimitation = {
-			x: 0,
-			y: 0,
-			w: 0,
-			h: 0,
-		};
+	//DOM test
+	constructor() {
+		super();
 
 		this.state = {
-			// Draggable test
-			currentEvent: null,
-			selectedBlock: null,
-			limitation: { ...defaultLimitation },
-
-			data: [
-				{ id: 1, image: "https://lorempixel.com/400/200/nature/6/" },
-				{ id: 2, image: "https://lorempixel.com/400/200/nature/5/" },
-				{ id: 3, image: "https://lorempixel.com/400/200/nature/4/" },
-				{ id: 4, image: "https://lorempixel.com/400/200/nature/6/" },
-				{ id: 5, image: "https://lorempixel.com/400/200/sports/1/" },
-				{ id: 6, image: "https://lorempixel.com/400/200/nature/8/" },
-				{ id: 7, image: "https://lorempixel.com/400/200/nature/1/" },
-				{ id: 8, image: "https://lorempixel.com/400/200/nature/3/" },
-				{ id: 9, image: "https://lorempixel.com/400/200/nature/4/" },
-				{ id: 10, image: "https://lorempixel.com/400/200/nature/5/" },
-			],
+			ViewArray: [],
+			Disable_Button: false,
 		};
 
-		// console.log(this.props.route.params.uriVideoCapturado);
+		this.animatedValue = new Animated.Value(0);
+		this.Array_Value_index = 0;
 	}
+
+	// constructor(props) {
+	// 	super(props);
+
+	// 	const defaultLimitation = {
+	// 		x: 0,
+	// 		y: 0,
+	// 		w: 0,
+	// 		h: 0,
+	// 	};
+
+	// 	this.state = {
+	// 		// Draggable test
+	// 		currentEvent: null,
+	// 		selectedBlock: null,
+	// 		limitation: { ...defaultLimitation },
+
+	// 		data: [
+	// 			{ id: 1, image: "https://lorempixel.com/400/200/nature/6/" },
+	// 			{ id: 2, image: "https://lorempixel.com/400/200/nature/5/" },
+	// 			{ id: 3, image: "https://lorempixel.com/400/200/nature/4/" },
+	// 			{ id: 4, image: "https://lorempixel.com/400/200/nature/6/" },
+	// 			{ id: 5, image: "https://lorempixel.com/400/200/sports/1/" },
+	// 			{ id: 6, image: "https://lorempixel.com/400/200/nature/8/" },
+	// 			{ id: 7, image: "https://lorempixel.com/400/200/nature/1/" },
+	// 			{ id: 8, image: "https://lorempixel.com/400/200/nature/3/" },
+	// 			{ id: 9, image: "https://lorempixel.com/400/200/nature/4/" },
+	// 			{ id: 10, image: "https://lorempixel.com/400/200/nature/5/" },
+	// 		],
+	// 	};
+	// }
+
+	//DOM Test
+	Add_New_View_Function = () => {
+		this.animatedValue.setValue(0);
+
+		let New_Added_View_Value = { Array_Value_index: this.Array_Value_index };
+
+		this.setState({ Disable_Button: true, ViewArray: [...this.state.ViewArray, New_Added_View_Value] }, () => {
+			Animated.timing(this.animatedValue, {
+				toValue: 1,
+				duration: 400,
+				useNativeDriver: true,
+			}).start(() => {
+				this.Array_Value_index = this.Array_Value_index + 1;
+				this.setState({ Disable_Button: false });
+			});
+		});
+	};
 
 	// Draggable
 	callEventHandler(event, message) {
@@ -273,89 +303,60 @@ export default class EditVideo extends Component {
 		const { uriVideoCapturado } = this.props.route.params;
 		const { modalVisible } = this.state;
 
+		//DOM Test
+		const AnimationValue = this.animatedValue.interpolate({
+			inputRange: [0, 1],
+			outputRange: [-59, 0],
+		});
+
+		let Render_Animated_View = this.state.ViewArray.map((item, key) => {
+			if (key == this.Array_Value_index) {
+				return (
+					<Animated.View
+						key={key}
+						style={[
+							styles.Animated_View_Style,
+							{ opacity: this.animatedValue, transform: [{ translateY: AnimationValue }] },
+						]}
+					>
+						<Text style={styles.View_Inside_Text}>
+							Supongamos que es un sticker seleccionado {item.Array_Value_Index}
+						</Text>
+					</Animated.View>
+				);
+			} else {
+				return (
+					<View key={key} style={styles.Animated_View_Style}>
+						<Text style={styles.View_Inside_Text}>
+							Supongamos que es un sticker seleccionado {item.Array_Value_Index}
+						</Text>
+					</View>
+				);
+			}
+		});
+
 		return (
 			<View style={{ flex: 1 }}>
 				{/* Draggable test */}
-				{this.renderTwoItems()}
+				{/* {this.renderTwoItems()} */}
 
-				{/* <Modal
-					animationType="slide"
-					transparent={true}
-					visible={modalVisible}
-					onRequestClose={() => {
-						// Alert.alert("Modal has been closed!");
-					}}
-				>
-					<View style={styles.centeredView}>
-						<View style={styles.modalView}>
-							<Text style={styles.modalText}>Seleccione un Sticker a usar</Text>
-
-							<FlatList
-								style={styles.list}
-								contentContainerStyle={styles.listContainer}
-								data={this.state.data}
-								horizontal={false}
-								numColumns={2}
-								renderItem={(post) => {
-									const item = post.item;
-
-									return (
-										<View style={styles.card}>
-											<TouchableOpacity
-												onPress={() => {
-													this.addSticker();
-												}}
-											>
-												<Image style={styles.cardImage} source={{ uri: item.image }} />
-											</TouchableOpacity>
-										</View>
-									);
-								}}
-							/>
-
-							<TouchableHighlight
-								style={{ ...styles.aceptarVideoBtn }}
-								onPress={() => {
-									this.setModalVisible(!modalVisible);
-								}}
-							>
-								<Text>Aceptar</Text>
-							</TouchableHighlight>
-						</View>
-					</View>
-				</Modal>
-
-				<Video
-					source={{ uri: uriVideoCapturado }}
-					rate={1.0}
-					volume={1.0}
-					isMuted={false}
-					resizeMode="cover"
-					shouldPlay={true}
-					isLooping
-					useNativeControls={false}
-					style={{ width: "100%", height: "100%", flex: 1 }}
-				/>
-
-				<View style={styles.accionesBotones}>
-					<TouchableOpacity
-						style={{ margin: 10 }}
-						// onPress={() => setArir(false)}
-					>
-						<Ionicons name="md-close-circle" size={50} color="#fff" />
-					</TouchableOpacity>
+				<View style={styles.MainContainer}>
+					<ScrollView>
+						<View style={{ flex: 1, padding: 2 }}>{Render_Animated_View}</View>
+					</ScrollView>
 
 					<TouchableOpacity
-						style={{ margin: 10 }}
-						// onPress={() => savePicture()}
+						activeOpacity={0.7}
+						style={styles.TouchableOpacityStyle}
+						disable={this.state.Disable_Button}
+						onPress={this.Add_New_View_Function}
 					>
-						<Ionicons name="md-send" size={50} color="#fff" />
+						<Image
+							source={{ uri: "https://reactnativecode.com/wp-content/uploads/2017/11/Floating_Button.png" }}
+							style={styles.FloatingButtonStyle}
+						/>
 					</TouchableOpacity>
-
-					<TouchableOpacity style={{ margin: 10 }} onPress={() => this.setModalVisible(true)}>
-						<MaterialCommunityIcons name="sticker" size={50} color="#fff" />
-					</TouchableOpacity>
-				</View> */}
+				</View>
 			</View>
 		);
 	}
@@ -461,5 +462,40 @@ const styles = StyleSheet.create({
 		height: "100%",
 		backgroundColor: "#D1D5DA",
 		marginTop: 4,
+	},
+	MainContainer: {
+		flex: 1,
+		backgroundColor: "#eee",
+		justifyContent: "center",
+		paddingTop: Platform.OS == "ios" ? 20 : 0,
+	},
+
+	Animated_View_Style: {
+		height: 60,
+		backgroundColor: "#FF9800",
+		alignItems: "center",
+		justifyContent: "center",
+		margin: 5,
+	},
+
+	View_Inside_Text: {
+		color: "#fff",
+		fontSize: 24,
+	},
+
+	TouchableOpacityStyle: {
+		position: "absolute",
+		width: 50,
+		height: 50,
+		alignItems: "center",
+		justifyContent: "center",
+		right: 30,
+		bottom: 30,
+	},
+
+	FloatingButtonStyle: {
+		resizeMode: "contain",
+		width: 50,
+		height: 50,
 	},
 });
